@@ -1,0 +1,116 @@
+```{r}
+dat<-read.csv("tgpp.csv")
+class(dat[,1])
+class(dat[,2])
+class(dat[,3])
+sapply(dat, class)
+```
+
+```{r}
+for (i in 1:11) {
+    print(class(dat[ , i]))
+}
+```
+```{r}
+dat_classes <- NULL
+for (i in 1:11) {
+    dat_classes[i] <- class(dat[ , i])
+}
+
+dat_classes
+```
+
+```{r}
+dat_classes <- NULL
+for (i in 1:ncol(dat)) {
+    dat_classes[i] <- class(dat[ , i])
+}
+```
+```{r}
+dat_classes <- NULL
+for (i in 1:ncol(dat)) {
+    dat_classes[i] <- class(dat[ , i])
+    if(dat_classes[i] == "integer") {
+        print('sweet!')
+    }
+}
+```
+```{r}
+dat_classes <- NULL
+for (i in 1:ncol(dat)) {
+    dat_classes[i] <- class(dat[ , i])
+    if(dat_classes[i] == "integer") {
+        print('sweet!')
+    }
+    else {
+        print('sour')
+    }
+}
+```
+```{r}
+dat_classes <- NULL
+for (i in 1:ncol(dat)) {
+    dat_classes[i] <- class(dat[ , i])
+    if (dat_classes[i] == "integer") {
+        print('sweet!')
+    }
+    else {
+        if (dat_classes[i] == 'factor') {
+            print('ok')
+        }
+        else {
+            print('sour')
+        }
+    }
+}
+```
+```{r}
+dat_classes <- NULL
+for (i in 1:ncol(dat)) {
+    dat_classes[i] <- class(dat[ , i])
+    if (dat_classes[i] == "integer") {
+        print('sweet!')
+    }
+    else if (dat_classes[i] == 'factor') {
+            print('ok')
+    }
+    else {
+            print('sour')
+    }
+}
+```
+```{r}
+x <- 1:10
+ifelse(x > 5 , 'sweet!', 'sour!')
+```
+```{r}
+eval_class <- function(x) {
+    dat_classes <- NULL
+    for (i in 1:ncol(x)) {
+        dat_classes[i] <- class(x[ , i])
+        if (dat_classes[i] == "integer") {
+            print('sweet!')
+        }
+        else if (dat_classes[i] == 'factor') {
+            print('ok')
+        }
+        else {
+            print('sour')
+        }
+    }
+    return(dat_classes)
+}
+
+eval_class(dat)
+```
+```{r}
+dbl_dat <- cbind(dat, dat)
+
+eval_class(dbl_dat)
+```
+```{r}
+debug(eval_class)
+eval_class(dat)
+undebug(eval_class)
+```
+
