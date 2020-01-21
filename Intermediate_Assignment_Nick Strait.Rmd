@@ -83,14 +83,13 @@ y
 
 7. Place your for loop into a function that accepts as its argument any vector of arbitrary length and it will return y.
 ```{r}
-sum_seq <- function(x){
-  y<-NULL
-  for(i in x){
-    y[i]<-sum(x[1:i])
-      if(y[i]>10){
-        print("NA")
-    }
+sum_seq <- function(d){
+  b<-NULL
+  for(i in d){
+    b[i]<-sum(d[1:i])
   }
+  print(b)
 }
+sum_seq(x)
 ```
 
