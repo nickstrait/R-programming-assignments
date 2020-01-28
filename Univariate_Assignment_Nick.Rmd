@@ -1,0 +1,47 @@
+```{r}
+trees <- read.csv("treedata.csv")
+red_mod1 <- lm(formula = cover ~ elev + tci + streamdist + disturb + beers, data = trees, subset = species == "Acer rubrum")
+red_mod2 <- lm(formula = cover ~ plotsize + utme + utmn + elev + tci + streamdist + disturb + beers, data = trees, subset = species == "Acer rubrum")
+summary(red_mod1)
+summary(red_mod2)
+library(car)
+Anova(red_mod1, type = 3)
+Anova(red_mod2, type = 3)
+Anova(red_mod3, type = 3)
+```
+```{r}
+red_int <- lm(formula = cover ~ plotsize * utme * utmn * elev * tci * streamdist * disturb * beers, data = trees, subset = species == "Acer rubrum")
+summary(red_int)
+```
+
+```{r}
+AIC(red_mod1)
+AIC(red_mod2)
+AIC(red_mod3)
+```
+```{r}
+red_mod3 <- lm(formula = cover ~ plotsize + utmn + elev + streamdist + beers, data = trees, subset = species == "Acer rubrum")
+summary(red_mod3)
+```
+
+
+```{r}
+fir_mod1 <- lm(formula = cover ~ plotsize + utme + utmn + elev + tci + streamdist + disturb + beers, data = trees, subset = species == "Abies fraseri")
+summary(fir_mod1)
+```
+
+```{r}
+fir_mod2 <- lm(formula = cover ~ utmn + elev + tci + disturb + beers, data = trees, subset = species == "Abies fraseri")
+summary(fir_mod2)
+```
+
+```{r}
+fir_mod3 <- lm(formula = cover ~ utmn * elev * tci * disturb * beers, data = trees, subset = species == "Abies fraseri")
+summary(fir_mod3)
+```
+
+```{r}
+Anova(fir_mod1, type = 3)
+Anova(fir_mod2, type = 3)
+```
+
