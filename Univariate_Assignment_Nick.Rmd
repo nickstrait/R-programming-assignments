@@ -1,28 +1,102 @@
 ```{r}
 trees <- read.csv("treedata.csv")
-red_mod1 <- lm(formula = cover ~ elev + tci + streamdist + disturb + beers, data = trees, subset = species == "Acer rubrum")
-red_mod2 <- lm(formula = cover ~ plotsize + utme + utmn + elev + tci + streamdist + disturb + beers, data = trees, subset = species == "Acer rubrum")
-summary(red_mod1)
-summary(red_mod2)
-library(car)
-Anova(red_mod1, type = 3)
-Anova(red_mod2, type = 3)
-Anova(red_mod3, type = 3)
+```
+
+So I understand that we should take into account absence of a species from a plot, but I don't understand how to reformat the data in a way to then be able to make a model from. The datasheet could have just had every plot listed with all species marked for their respective cover. Only way I know how to reformat that is to do it in excel and that would take a long time. Also, the values for the cover does not make sense. How can 1 = trace but 2 = 0-1% ?. Shouldn't 1 be abscent from that plot? Just a little confused there. With that in mind, I just worked with the regular data sheet since we didn't go into converting data in the lessons.
+```{r}
+boxplot(cover ~ disturb, data = trees, subset = species == "Acer rubrum")
+boxplot(cover ~ disturb, data = trees, subset = species == "Abies fraseri")
+plot(cover ~ elev, data = trees, type = 'n', 
+     xlab = 'Elevation', ylab = 'Cover')
+points(cover ~ elev, data = trees, subset = species == "Acer rubrum",
+       pch = 1, col = 'red')
+points(cover ~ elev, data = trees, subset = species == "Abies fraseri",
+       pch = 2, col = 'blue')
+legend('toprigh', c('Acer rubrum', 'Abies fraseri'), col = c('red', 'blue'), 
+       pch = c(1, 2), bty = 'n')
+```
+
+```{r}
+plot(cover ~ streamdist, data = trees, type = 'n', 
+     xlab = 'Stream Distance', ylab = 'Cover')
+points(cover ~ streamdist, data = trees, subset = species == "Acer rubrum",
+       pch = 1, col = 'red')
+points(cover ~ streamdist, data = trees, subset = species == "Abies fraseri",
+       pch = 2, col = 'blue')
+legend('topright', c('Acer rubrum', 'Abies fraseri'), col = c('red', 'blue'), 
+       pch = c(1, 2), bty = 'n')
 ```
 ```{r}
+plot(cover ~ tci, data = trees, type = 'n', 
+     xlab = 'Topographic Convergance Index', ylab = 'Cover')
+points(cover ~ tci, data = trees, subset = species == "Acer rubrum",
+       pch = 1, col = 'red')
+points(cover ~ tci, data = trees, subset = species == "Abies fraseri",
+       pch = 2, col = 'blue')
+legend('topright', c('Acer rubrum', 'Abies fraseri'), col = c('red', 'blue'), 
+       pch = c(1, 2), bty = 'n')
+```
+
+```{r}
+plot(cover ~ beers, data = trees, type = 'n', 
+     xlab = 'Transformed slope aspect', ylab = 'Cover')
+points(cover ~ beers, data = trees, subset = species == "Acer rubrum",
+       pch = 1, col = 'red')
+points(cover ~ beers, data = trees, subset = species == "Abies fraseri",
+       pch = 2, col = 'blue')
+legend('topleft', c('Acer rubrum', 'Abies fraseri'), col = c('red', 'blue'), 
+       pch = c(1, 2), bty = 'n')
+```
+
+
+```{r}
+red_mod1 <- lm(formula = cover ~ elev + tci + streamdist + disturb + beers, data = trees, subset = species == "Acer rubrum")
+red_mod2 <- lm(formula = cover ~ plotsize + utme + utmn + elev + tci + streamdist + disturb + beers, data = trees, subset = species == "Acer rubrum")
+red_mod3 <- lm(formula = cover ~ plotsize + utmn + elev + streamdist + beers, data = trees, subset = species == "Acer rubrum")
 red_int <- lm(formula = cover ~ plotsize * utme * utmn * elev * tci * streamdist * disturb * beers, data = trees, subset = species == "Acer rubrum")
 summary(red_int)
 ```
 
 ```{r}
+summary(red_mod3)
+```
+
+```{r}
+summary(red_mod1)
+```
+
+```{r}
+summary(red_mod2)
+```
+
+
+```{r}
 AIC(red_mod1)
 AIC(red_mod2)
 AIC(red_mod3)
+AIC(red_int)
 ```
+
 ```{r}
-red_mod3 <- lm(formula = cover ~ plotsize + utmn + elev + streamdist + beers, data = trees, subset = species == "Acer rubrum")
-summary(red_mod3)
+library(car)
+Anova(red_mod1, type = 3)
+Anova(red_mod2, type = 3)
+Anova(red_mod3, type = 3)
 ```
+
+
+```{r}
+par(mfrow = c(2,2))
+plot(red_int)
+```
+
+It would appear that the interaction model explains cover the best for the red maple. 
+
+The most important interactions were: utmn:streamdist:disturbLT-SEL, tci:streamdist:disturbLT-SEL, elev:streamdist:disturbLT-SEL, plotsize:streamdist:beers, utme:streamdist:beers, utmn:streamdist:beers, elev:streamdist:beers, tci:streamdist:beers, streamdist:disturbLT-SEL:beers, and utmn:elev:tci:streamdist. 
+
+If you look at mod3, which was the next best one, the important variables are plotsize, utmn, elev, streamdist, and beers.
+
+I don't notice any glaring issues violations in OLM. Maybe some issues with leverage, but there is also an error in the plots, not sure how to correct that
 
 
 ```{r}
@@ -36,8 +110,15 @@ summary(fir_mod2)
 ```
 
 ```{r}
-fir_mod3 <- lm(formula = cover ~ utmn * elev * tci * disturb * beers, data = trees, subset = species == "Abies fraseri")
-summary(fir_mod3)
+fir_int <- lm(formula = cover ~ utmn * elev * tci * disturb * beers, data = trees, subset = species == "Abies fraseri")
+summary(fir_int)
+```
+
+
+```{r}
+AIC(fir_mod1)
+AIC(fir_mod2)
+AIC(fir_int)
 ```
 
 ```{r}
@@ -45,3 +126,47 @@ Anova(fir_mod1, type = 3)
 Anova(fir_mod2, type = 3)
 ```
 
+```{r}
+par(mfrow = c(2,2))
+plot(fir_mod2)
+```
+
+
+For the fir tree, the best model was model 2, but there really wasn't a difference between that and model 1.
+
+The most important variables for the fir tree are utmn, elev, tci, and beers
+
+I don't see any violations with the fir model eiether. Might be a homoscadisticity issue. The top left graph has a few values following the line.
+
+It seems to be easier to explain the variance for the fir trees than the maples. This could be due to their smaller sample size or they could be habitat specialist, while red maples are a generalist species.
+
+
+This wouldn't work for an interaction, so I ran mod3 for red maples
+```{r}
+acer_poi = glm(cover ~ plotsize + utmn + elev + streamdist + beers, data = trees, subset = species == "Acer rubrum", 
+           family='poisson')
+summary(acer_poi)
+```
+
+```{r}
+pseudo_r2 = function(acer_poi) {
+                1 -  acer_poi$deviance / acer_poi$null.deviance
+            }
+```
+
+```{r}
+fir_poi = glm(cover ~ utmn + elev + tci + disturb + beers, data = trees, subset = species == "Abies fraseri", 
+           family='poisson')
+summary(fir_poi)
+```
+
+```{r}
+pseudo_r2 = function(fir_poi) {
+                1 -  fir_poi$deviance / fir_poi$null.deviance
+            }
+```
+
+The GLM gave a slightly better r2 value for both of the models
+
+3. Conclusions:
+      From these analyzes, you can conclude that the data really needs to be formatted better from the start. But you can also conclude that red maples are likely generalists and have more difficult variance to model, while frasier firs are specialists and have easier variance to model.
