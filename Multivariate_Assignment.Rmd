@@ -48,7 +48,7 @@ orditorp(cca_dune, display='cn', col='red')
 
 ```
 
-3. From this plot and analysis it complements the mds plot. Moisture is still an important variable. Moisture 5, 1, 3 have clearly distinct clusters. However the cca showed that management and manure also might be an important variable. We didn't see those in the mds, because we only plotted it for moisture. I think the cca analysis is more useful, but the mds plots look nicer and are easier to understand/make, but both are useful analyzes.
+3. From this plot and analysis it complements the mds plot. Moisture is still an important variable. Moisture 5, 1, 3 have clearly distinct clusters. However the cca showed that management and manure also might be an important variable. We didn't see those in the mds, because we only plotted it for moisture. I think the cca analysis is more useful, but the mds plots look nicer and are easier to understand/make, but both are useful analyses.
 
 ```{r}
 dune.fit <- envfit(dune_mds, dune.env)
